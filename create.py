@@ -1,27 +1,33 @@
 import requests
 from bs4 import BeautifulSoup
 import os
-
-num = '11920'
 base = 'https://www.acmicpc.net/problem/'
-url = base + num
 
-response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+while True:
+    print('문제 번호를 입력하세요. 중단하려면 n을 입력하세요.')
+    num = input()
+    if num == 'n' or num == 'N':
+        break
+    url = base + num
+    print(url)
 
-if response.status_code == 200:
-    html = response.text
-    soup = BeautifulSoup(html, 'html.parser')
+    response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
 
-    title = soup.find("span", id="problem_title").get_text()
-    sample_i = soup.select("pre[id^=sample-input]")
+    if response.status_code == 200:
+        html = response.text
+        soup = BeautifulSoup(html, 'html.parser')
 
-    os.system(f"mkdir \"[BOJ_{num}]{title}\"")
-    os.system(f"echo import sys > \"[BOJ_{num}]{title}/BOJ_{num}.py\"")
-    os.system(f"echo sys.stdin = open('input.txt') >> \"[BOJ_{num}]{title}/BOJ_{num}.py\"")
-    
-    for i in range(len(sample_i)):
-        for text_i in sample_i[i].text.strip().split('\n'):
-            os.system(f"echo {text_i} >> \"[BOJ_{num}]{title}/input{i+1}.txt\"")
+        title = soup.find("span", id="problem_title").get_text()
+        sample_i = soup.select("pre[id^=sample-input]")
 
-else:
-    print(response.status_code)
+        os.system(f"mkdir \"[BOJ_{num}]{title}\"")
+        os.system(f"echo import sys > \"[BOJ_{num}]{title}/BOJ_{num}.py\"")
+        os.system(f"echo sys.stdin = open('input1.txt') >> \"[BOJ_{num}]{title}/BOJ_{num}.py\"")
+
+        for i in range(len(sample_i)):
+            for text_i in sample_i[i].text.strip().split('\n'):
+                os.system(f"echo {text_i} >> \"[BOJ_{num}]{title}/input{i+1}.txt\"")
+
+    else:
+        print(response.status_code)
+        break
