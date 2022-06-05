@@ -22,11 +22,14 @@ while True:
 
         os.system(f"mkdir \"[BOJ_{num}]{title}\"")
         os.system(f"echo import sys > \"[BOJ_{num}]{title}/BOJ_{num}.py\"")
-        os.system(f"echo sys.stdin = open('input1.txt') >> \"[BOJ_{num}]{title}/BOJ_{num}.py\"")
 
         for i in range(len(sample_i)):
             for text_i in sample_i[i].text.strip().split('\n'):
                 os.system(f"echo {text_i} >> \"[BOJ_{num}]{title}/input{i+1}.txt\"")
+
+        with open(f'[BOJ_{num}]{title}/BOJ_{num}.py', 'a') as file_data:
+            file_data.write(f"for i in range({len(sample_i)}):\n")
+            file_data.write("    sys.stdin = open(f'input{i}.txt')")
 
     else:
         print(response.status_code)
